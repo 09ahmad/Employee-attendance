@@ -397,7 +397,7 @@ def attendance_list_filter(emp_code, date_from, date_to, status) -> dict:
     return flt
 
 
-def _log_metrics(include_date: bool = False, for_trend: bool = False) -> dict:
+def _log_metrics(include_date: bool = False) -> dict:
     """$project stage body that turns a stored log into small integers the $group stages can sum.
     It READS the stored derived values (late_minutes, overtime_minutes, half_day, work_hours); nothing is recomputed
     from punch times.
@@ -577,7 +577,7 @@ def trend_pipeline(department: str, d_from: date, d_to: date) -> list:
             "foreignField": "emp_code",
             "pipeline": [
                 {"$match": {"date": {"$gte": f_str, "$lte": t_str}}},
-                {"$project": _log_metrics(include_date=True, for_trend=True)},
+                {"$project": _log_metrics(include_date=True)},
             ],
             "as": "logs",
         }},
